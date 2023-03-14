@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.recado.addtasks.ui.model.TaskModel
+import kotlinx.coroutines.selects.select
 import javax.inject.Inject
 
 
@@ -30,8 +31,10 @@ class TasksViewModel @Inject constructor():ViewModel() {
     }
 
     fun onCheckBoxSelected(taskModel: TaskModel) {
-
-
+        // Este metodo es creando un LiveData, de otra forma JetPack no recompone la vista
+        val index = _tasks.indexOf(taskModel)
+        _tasks[index] = _tasks[index].let {
+            it.copy(selected = !it.selected)
+        }
     }
-
 }
