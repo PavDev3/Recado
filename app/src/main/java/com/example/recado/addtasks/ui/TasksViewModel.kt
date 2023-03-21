@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recado.addtasks.domain.AddTaskUseCase
 import com.example.recado.addtasks.domain.GetTaksUseCase
+import com.example.recado.addtasks.domain.UpdateTaskUseCase
 import com.example.recado.addtasks.ui.TasksUiState.*
 import com.example.recado.addtasks.ui.model.TaskModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TasksViewModel @Inject constructor(
     private val addTaskUseCase: AddTaskUseCase,
+    private val updateTaskUseCase: UpdateTaskUseCase,
     getTasksUseCase: GetTaksUseCase
 ) : ViewModel() {
 
@@ -47,12 +49,10 @@ class TasksViewModel @Inject constructor(
     }
 
     fun onCheckBoxSelected(taskModel: TaskModel) {
-        // Este metodo es creando un LiveData, de otra forma JetPack no recompone la vista
-        // Todo Check
-//        val index = _tasks.indexOf(taskModel)
-//        _tasks[index] = _tasks[index].let {
-//            it.copy(selected = !it.selected)
-//        }
+      // Con este metodo, modificamos el estado selected a lo opuesto de lo que TaskModel tiene
+        viewModelScope.launch {
+            updateTaskUseCase(taskModel.copy(selected = !taskModel.selected))
+        }
     }
 
     fun onItemRemove(taskModel: TaskModel) {
