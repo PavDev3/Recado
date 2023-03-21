@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recado.addtasks.domain.AddTaskUseCase
+import com.example.recado.addtasks.domain.DeleteTaskUseCase
 import com.example.recado.addtasks.domain.GetTaksUseCase
 import com.example.recado.addtasks.domain.UpdateTaskUseCase
 import com.example.recado.addtasks.ui.TasksUiState.*
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class TasksViewModel @Inject constructor(
     private val addTaskUseCase: AddTaskUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
     getTasksUseCase: GetTaksUseCase
 ) : ViewModel() {
 
@@ -29,9 +31,6 @@ class TasksViewModel @Inject constructor(
 
     private val _showDialog = MutableLiveData<Boolean>()
     val showDialog: LiveData<Boolean> = _showDialog
-
-//   private val _tasks = mutableStateListOf<TaskModel>()
-//   val task: List<TaskModel> = _tasks
 
     fun onDialogClose() {
         _showDialog.value = false
@@ -56,8 +55,8 @@ class TasksViewModel @Inject constructor(
     }
 
     fun onItemRemove(taskModel: TaskModel) {
-        // Remove item
-//        val task = _tasks.find { it.id == taskModel.id }
-//        _tasks.remove(task)
+        viewModelScope.launch {
+            deleteTaskUseCase(taskModel)
+        }
     }
 }

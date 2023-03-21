@@ -56,7 +56,7 @@ fun TasksScreen(taskViewModel: TasksViewModel) {
                     onTaskAdded = { taskViewModel.onTaskCreated(it) })
                 FabDialog(
                     modifier = Modifier
-                        .align(Alignment.BottomEnd)
+                        .align(Alignment.BottomCenter)
                         .padding(16.dp), taskViewModel
                 )
                 TaskList((uiState as TasksUiState.Success).tasks, taskViewModel)
